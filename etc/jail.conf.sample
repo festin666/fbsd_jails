@@ -1,0 +1,24 @@
+# mon +
+# ldap +
+# www
+# mail 
+# dns + 
+# dns2 +
+# proxy
+# pbx
+host.hostname = $name.local.bbgroup.pro;
+interface = vlan10;
+exec.start = "/bin/sh /etc/rc";
+exec.stop = "/bin/sh /etc/rc.shutdown";
+exec.prestart = "mount_nullfs /usr/ports/packages/All /usr/local/jails/$name/jail/usr/ports/packages; ls /usr/local/jails/$name/jail/dev";
+exec.prestop = "umount -t nullfs /usr/local/jails/$name/jail/usr/ports/packages";
+mount.fstab = "/usr/local/jails/$name/fstab";
+path = /usr/local/jails/$name/jail;
+devfs_ruleset = 4;
+mount.devfs;
+
+pbx {
+	ip4.addr = 192.168.10.7;
+	devfs_ruleset = 6;
+}
+
