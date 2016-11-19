@@ -1,8 +1,7 @@
 JAIL_NAME {
-        path = /home/festin/jails/$name/jail;
-        mount.fstab = "/home/festin/jails/$name/fstab";
-        exec.prestart = "ls /home/festin/jails/$name/jail/dev; mount_nullfs -oro /usr/ports/packages/All /home/festin/jails/$name/jail/usr/ports/packages;";
-        exec.prestop = "umount -t nullfs /home/festin/jails/$name/jail/usr/ports/packages";
+        path = /usr/local/jails/$name/jail;
+        mount.fstab = "/usr/local/jails/$name/fstab";
+        exec.prestart = "ls /usr/local/jails/$name/jail/dev;";
         allow.raw_sockets = 1;
         ip4.addr = JAIL_IP4;
 }

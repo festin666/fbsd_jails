@@ -1,12 +1,4 @@
-# mon +
-# ldap +
-# www
-# mail 
-# dns + 
-# dns2 +
-# proxy
-# pbx
-host.hostname = $name.local.bbgroup.pro;
+host.hostname = $name.local.grigoriev.pro
 interface = vlan10;
 exec.start = "/bin/sh /etc/rc";
 exec.stop = "/bin/sh /etc/rc.shutdown";
@@ -17,8 +9,4 @@ path = /usr/local/jails/$name/jail;
 devfs_ruleset = 4;
 mount.devfs;
 
-pbx {
-	ip4.addr = 192.168.10.7;
-	devfs_ruleset = 6;
-}
 
