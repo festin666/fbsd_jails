@@ -1,7 +1,7 @@
 # fbsd_jails
 Scripts to automate process of setting up FreeBSD jails
 
-1. Make /etc/jail from etc/jail.conf.example
+1. Make /etc/jail from etc/jail.conf.example.
 
 2. CREATE BASE JAIL YOURSELF (not creates by these script yet).
 
