@@ -1,12 +1,22 @@
-host.hostname = $name.local.grigoriev.pro
-interface = vlan10;
+host.hostname = $name.local.grigoriev.pro;
+interface = lo2;
 exec.start = "/bin/sh /etc/rc";
 exec.stop = "/bin/sh /etc/rc.shutdown";
-exec.prestart = "mount_nullfs /usr/ports/packages/All /usr/local/jails/$name/jail/usr/ports/packages; ls /usr/local/jails/$name/jail/dev";
-exec.prestop = "umount -t nullfs /usr/local/jails/$name/jail/usr/ports/packages";
+exec.prestart = "ls /usr/local/jails/$name/jail/dev > /dev/null";
 mount.fstab = "/usr/local/jails/$name/fstab";
 path = /usr/local/jails/$name/jail;
 devfs_ruleset = 4;
 mount.devfs;
 
+/*
+base102 {
+	path = /usr/local/jails/base102;
+	exec.prestart = "ls /usr/local/jails/$name/dev";
+	exec.prestop = "";
+	mount.fstab = "";
+	mount.devfs;
+	ip4.addr = 10.10.4.5;
+	allow.raw_sockets = 1;
+}
+*/
 

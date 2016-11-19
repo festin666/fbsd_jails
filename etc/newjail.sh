@@ -39,11 +39,12 @@ done
 [ -z ${jail_md} ] && usage && exit
 [ -d "${jail_parent}/${jail_name}" ] && echo "Directory ${jail_parent}/${jail_name} already exists!" && exit
 [ $dry -eq 0 ] && set -e errexit
+jail_md_file=${jail_parent}/${jail_name}/disk
 
 execute "cp -R skel/ ${jail_parent}/${jail_name}"
 execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" -e \"s/JAIL_MD/${jail_md}/g\" -i '' ${jail_parent}/${jail_name}/fstab"
-execute "dd if=/dev/zero of=${jail_parent}/${jail_name}/disk count=0 bs=1m seek=${jail_size}"
-execute "mdmfs -F ${jail_parent}/${jail_name}/disk ${jail_md} ${jail_parent}/${jail_name}/md"
+execute "dd if=/dev/zero of=${jail_md_file} count=0 bs=1m seek=${jail_size}"
+execute "mdmfs -F ${jail_md_file} ${jail_md} ${jail_parent}/${jail_name}/md"
 execute "umount ${jail_parent}/${jail_name}/md"
 #execute "mdconfig -du ${jail_md}"
 execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" -e \"s/JAIL_IP4/${jail_ip4}/g\"  etc/jail.template >> /etc/jail.conf"

@@ -1,8 +1,3 @@
 JAIL_NAME {
-        path = /usr/local/jails/$name/jail;
-        mount.fstab = "/usr/local/jails/$name/fstab";
-        exec.prestart = "ls /usr/local/jails/$name/jail/dev;";
-        allow.raw_sockets = 1;
         ip4.addr = JAIL_IP4;
 }
-
