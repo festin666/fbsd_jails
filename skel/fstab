@@ -1,3 +1,3 @@
 /dev/JAIL_MD        /usr/local/jails/JAIL_NAME/md                        ufs     rw      0        0
-/usr/local/jails/base102 /usr/local/jails/JAIL_NAME/jail nullfs ro		0	0
+JAIL_BASE /usr/local/jails/JAIL_NAME/jail nullfs ro		0	0
 /usr/local/jails/JAIL_NAME/md /usr/local/jails/JAIL_NAME/jail unionfs rw,noatime	0 	0

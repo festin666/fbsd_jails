@@ -3,9 +3,10 @@
 usage() {
 cat << EOF
 Usage: 
-		$0 -n <jailname> -i <ip4> -m <md> [-s <size>] [-r]
+		$0 -n <jailname> -i <ip4> -m <md> [-s <size>] [-b <base>] [-r]
 
 creates new jail <jailname> size <size> megabytes with IPv4 address <ip4> 
+based on <base> system (built with create_base.sh)
 ONLY IF -r SPECIFIED else will simply display all commands on screen.
 <md> - md-unit like md0, md1, ...
 EOF
@@ -22,14 +23,16 @@ jail_name=""
 jail_size="500"
 jail_ip=""
 jail_md=""
+jail_base_raw="/usr/local/jails/base102"
 dry=1
 jail_parent="/usr/local/jails"
-while getopts n:s:i:m:r var; do
+while getopts n:s:i:m:rb: var; do
 	case $var in
 		n) jail_name="${OPTARG}";;
 		s) jail_size="${OPTARG}";;
 		i) jail_ip4="${OPTARG}";;
 		m) jail_md="${OPTARG}";;
+		b) jail_base_raw="${OPTARG}";;
 		r) dry=0;;
 		*) echo unknown argument '$var';;
 	esac
@@ -40,9 +43,10 @@ done
 [ -d "${jail_parent}/${jail_name}" ] && echo "Directory ${jail_parent}/${jail_name} already exists!" && exit
 [ $dry -eq 0 ] && set -e errexit
 jail_md_file=${jail_parent}/${jail_name}/disk
+jail_base=`echo ${jail_base_raw} | sed -e 's@\/@\\\/@g'`
 
 execute "cp -R skel/ ${jail_parent}/${jail_name}"
-execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" -e \"s/JAIL_MD/${jail_md}/g\" -i '' ${jail_parent}/${jail_name}/fstab"
+execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" -e \"s/JAIL_MD/${jail_md}/g\" -e \"s/JAIL_BASE/${jail_base}/g\" -i '' ${jail_parent}/${jail_name}/fstab"
 execute "dd if=/dev/zero of=${jail_md_file} count=0 bs=1m seek=${jail_size}"
 execute "mdmfs -F ${jail_md_file} ${jail_md} ${jail_parent}/${jail_name}/md"
 execute "umount ${jail_parent}/${jail_name}/md"
