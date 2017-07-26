@@ -23,7 +23,7 @@ jail_name=""
 jail_size="500"
 jail_ip=""
 jail_md=""
-jail_base_raw="/usr/local/jails/base102"
+jail_base_raw="/usr/local/jails/_base3"
 dry=1
 jail_parent="/usr/local/jails"
 while getopts n:s:i:m:rb: var; do
