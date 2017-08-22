@@ -23,7 +23,7 @@ jail_name=""
 jail_size="500"
 jail_ip=""
 jail_md=""
-jail_base_raw="/usr/local/jails/_base3"
+jail_base_raw="/usr/local/jails/_base4"
 dry=1
 jail_parent="/usr/local/jails"
 while getopts n:s:i:m:rb: var; do
@@ -45,38 +45,21 @@ done
 jail_md_file=${jail_parent}/${jail_name}/disk
 jail_base=`echo ${jail_base_raw} | sed -e 's@\/@\\\/@g'`
 
-execute "cp -R skel/ ${jail_parent}/${jail_name}"
+execute "mkdir ${jail_parent}/${jail_name}"
+execute "cp -R skel/fstab ${jail_parent}/${jail_name}"
+execute "cp -R skel/jail ${jail_parent}/${jail_name}"
 execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" -e \"s/JAIL_MD/${jail_md}/g\" -e \"s/JAIL_BASE/${jail_base}/g\" -i '' ${jail_parent}/${jail_name}/fstab"
 execute "dd if=/dev/zero of=${jail_md_file} count=0 bs=1m seek=${jail_size}"
-execute "mdmfs -F ${jail_md_file} ${jail_md} ${jail_parent}/${jail_name}/md"
-execute "umount ${jail_parent}/${jail_name}/md"
+execute "mdmfs -F ${jail_md_file} ${jail_md} ${jail_parent}/${jail_name}/jail/rw"
+execute "cp -R skel/rw/ ${jail_parent}/${jail_name}/jail/rw"
+execute "umount ${jail_parent}/${jail_name}/jail/rw"
 #execute "mdconfig -du ${jail_md}"
 execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" -e \"s/JAIL_IP4/${jail_ip4}/g\"  etc/jail.template >> /etc/jail.conf"
 # -e \"s/JAIL_PARENT/${jail_parent}/g\" # need to escape slashes in $jail_parent
 echo Jail ${jail_name} created. Installing packages...
 execute "jail -cv ${jail_name}"
-echo "Do install packages via Chef or something like?"
-
-#if [ ${jail_name} == "jenkins" ]; then
-#	execute "pkg -c ${jail_name}/jail install --yes php56 jenkins php-composer git php56-filter php56-mbstring php56-mcrypt php56-curl php56-simplexml php56-dom php56-tokenizer php-xdebug php56-xmlwriter php56-iconv php56-session wget mysql56-client php56-pdo_mysql"
-#	#execute "jexec -U jenkins -j ${jail_name} composer global require \"codeception/codeception=2.0.*\""
-#fi
-#if [ ${jail_name} == "mysql" ]; then
-#	execute "pkg -c ${jail_name}/jail install --yes mysql56-server"
-#fi
-#if [ ${jail_name} == "httppre" ]; then
-#	execute "pkg -j ${jail_name} install --yes mysql56-server"
-#	execute "pkg -j ${jail_name} install --yes lighttpd"
-#	execute "pkg -j ${jail_name} install --yes php56 php56-mbstring php56-mcrypt php56-curl php56-iconv php56-session php56-hash php56-ctype php56-pdo_mysql"
-#fi
-#[ ${jail_name} == "pbx2" ] && execute "pkg -c ${jail_name}/jail install --yes asterisk11"
-#execute "pkg -c ${jail_name}/jail info"
-#echo "Checking '~festin/conf/${jail_name}'"
-#if [ -f "/home/festin/conf/${jail_name}/onetime.sql" ]; then
-#	execute "jexec ${jail_name} mysql -u root < '/home/festin/conf/${jail_name}/onetime.sql'"
-#fi
-#if [ -d "/home/festin/conf/${jail_name}" ]; then
-#	execute "mkdir -p ${jail_name}/md/usr/local/etc/"
-#	execute "cp -R ~festin/conf/${jail_name}/ ${jail_name}/md/"
-#fi
+echo "Initialize jail for ansible and continue"
+execute "jexec ${jail_name} pw useradd ansible_temp -e+1d -h- -m -g wheel"
+execute "jexec ${jail_name} mkdir /home/ansible_temp/.ssh"
+execute "cp etc/ansible.key ${jail_parent}/${jail_name}/jail/rw/home/ansible_temp/.ssh/authorized_keys"
 exit
