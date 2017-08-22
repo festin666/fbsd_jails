@@ -1,4 +1,2 @@
-/dev/JAIL_MD        /usr/local/jails/JAIL_NAME/md                        ufs     rw      0        0
-JAIL_BASE /usr/local/jails/JAIL_NAME/jail nullfs ro		0	0
-/usr/local/jails/JAIL_NAME/md /usr/local/jails/JAIL_NAME/jail unionfs rw,noatime	0 	0
-local.grigoriev.pro:/usr/local/jails/nfs_home /usr/local/jails/JAIL_NAME/jail/usr/home nfs   rw  0   0
+JAIL_BASE           /usr/local/jails/JAIL_NAME/jail         nullfs ro       0	0
+/dev/JAIL_MD        /usr/local/jails/JAIL_NAME/jail/rw      ufs    rw       0   0
