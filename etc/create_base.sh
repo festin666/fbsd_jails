@@ -1,6 +1,6 @@
 #!/bin/sh
 
-JAIL_BASE="/usr/local/jails/_base3"
+JAIL_BASE=$1 #"/usr/local/jails/_base3"
 SRCCONF=`readlink -f etc/src.conf`
 echo Create base in ${JAIL_BASE}
 if [ -d "${JAIL_BASE}" ]; then
