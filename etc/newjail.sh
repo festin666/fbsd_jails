@@ -56,7 +56,7 @@ execute "umount ${jail_parent}/${jail_name}/jail/rw"
 #execute "mdconfig -du ${jail_md}"
 execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" -e \"s/JAIL_IP4/${jail_ip4}/g\"  etc/jail.template >> /etc/jail.conf"
 # -e \"s/JAIL_PARENT/${jail_parent}/g\" # need to escape slashes in $jail_parent
-echo Jail ${jail_name} created. Installing packages...
+echo Jail ${jail_name} created
 execute "jail -cv ${jail_name}"
 echo "Initialize jail for ansible and continue"
 execute "jexec ${jail_name} pw useradd ansible_temp -e+1d -h- -m -g wheel"
