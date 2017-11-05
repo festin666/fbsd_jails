@@ -1,6 +1,6 @@
 #!/bin/sh
 
-JAIL_BASE=$1 #"/usr/local/jails/_base3"
+JAIL_BASE=$1 # TODO Make validation
 SRCCONF=`readlink -f etc/src.conf`
 echo Create base in ${JAIL_BASE}
 if [ -d "${JAIL_BASE}" ]; then
@@ -19,6 +19,11 @@ cat <<E
 	[wait...]
 E
 make world DESTDIR=$JAIL_BASE SRCCONF=${SRCCONF} > ${LOGFILE} 2>&1
+echo status=$?
+if [ $? -ne 0 ]; then
+    echo "Couldn't compile world. See log for details."
+    exit 1
+fi
 cat <<-E
 	*********************************************
 	The World has been built in ${JAIL_BASE}
@@ -26,6 +31,7 @@ cat <<-E
 	*********************************************
 E	
 make distribution DESTDIR=$JAIL_BASE SRCCONF=${SRCCONF} >> ${LOGFILE} 2>>&1
+echo status=$?
 cat <<-E
 	*********************************************
 	Base is ready!
