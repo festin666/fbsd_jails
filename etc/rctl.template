@@ -1,0 +1,5 @@
+jail:JAIL_NAME:vmemoryuse:log=800M
+jail:JAIL_NAME:vmemoryuse:deny=1024M
+jail:JAIL_NAME:writeiops:throttle=20
+jail:JAIL_NAME:pcpu:log=35
+jail:JAIL_NAME:pcpu:deny=40
