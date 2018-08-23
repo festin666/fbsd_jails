@@ -4,7 +4,7 @@ JAIL_BASE=$1 # TODO Make validation
 SRCCONF=`readlink -f etc/src.conf`
 echo Create base in ${JAIL_BASE}
 if [ -d "${JAIL_BASE}" ]; then
-	echo "${JAIL_BASE} already exists. Exiting"
+	echo "${JAIL_BASE} already exists. Exiting (only create symlinks)"
     curdir=`pwd`
     cd ${JAIL_BASE}
     if [ $? -eq 0 ]; then
