@@ -7,8 +7,3 @@ Scripts to automate process of setting up FreeBSD jails
 
 3. To create new jail run etc/newjail.sh (without arguments it will 
 show usage info).
-
-4. Add configuration for mdconfig into rc.conf. For example: 
-mdconfig_md8="-t vnode -f /usr/local/jails/dns2/disk"
-
-
