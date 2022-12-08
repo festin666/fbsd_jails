@@ -3,9 +3,9 @@
 usage() {
 cat << EOF
 Usage: 
-		$0 -n <jailname> -i <ip4> [-s <size>] [-b <base>] [-r]
+		$0 -n <jailname> -i <ip4> [-s <size>] [-b <base>] [-p <jail_parent>] [-r]
 
-creates new jail <jailname> size <size> megabytes with IPv4 address <ip4> 
+creates new jail <jailname> in <jail_parent> size <size> megabytes with IPv4 address <ip4>
 based on <base> system (built with create_base.sh)
 ONLY IF -r SPECIFIED else will simply display all commands on screen.
 EOF
@@ -24,12 +24,13 @@ jail_ip="" #TODO
 jail_base_raw="/usr/local/jails/_base4" #TODO last created?
 dry=1
 jail_parent="/usr/local/jails"
-while getopts n:s:i:rb: var; do
+while getopts n:s:i:rb:p: var; do
 	case $var in
 		n) jail_name="${OPTARG}";;
 		s) jail_size="${OPTARG}";;
 		i) jail_ip4="${OPTARG}";;
 		b) jail_base_raw="${OPTARG}";;
+		p) jail_parent="${OPTARG}";;
 		r) dry=0;;
 		*) echo unknown argument '$var';;
 	esac

@@ -10,7 +10,7 @@ if [ -d "${JAIL_BASE}" ]; then
     if [ $? -eq 0 ]; then
         [ -e rw ] || mkdir rw
         [ -e usr/ports ] || mkdir usr/ports
-        [ -e usr/ports/distfiles ] || ln -s ../../rw/distfiles usr/ports/distfiles
+    ###    [ -e usr/ports/distfiles ] || ln -s ../../rw/distfiles usr/ports/distfiles
         [ -d etc -o -L etc ] || ln -s rw/etc etc
         [ -d home -o -L home ] || ln -s rw/home home
         [ -e usr/home ] || ln -s ../rw/home usr/home
