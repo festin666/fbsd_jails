@@ -1,3 +1,3 @@
-JAIL_BASE           				 /usr/local/jails/JAIL_NAME/jail         nullfs ro       0	0
-/usr/local/jails/JAIL_NAME/rw        /usr/local/jails/JAIL_NAME/jail/rw      nullfs    rw       0   0
+JAIL_BASE           				 JAIL_PARENT/JAIL_NAME/jail         nullfs ro       0	0
+JAIL_PARENT/JAIL_NAME/rw        JAIL_PARENT/JAIL_NAME/jail/rw      nullfs    rw       0   0
 

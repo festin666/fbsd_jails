@@ -23,14 +23,14 @@ jail_size="500"
 jail_ip="" #TODO
 jail_base_raw="/usr/local/jails/_base4" #TODO last created?
 dry=1
-jail_parent="/usr/local/jails"
+jail_parent_raw="/usr/local/jails"
 while getopts n:s:i:rb:p: var; do
 	case $var in
 		n) jail_name="${OPTARG}";;
 		s) jail_size="${OPTARG}";;
 		i) jail_ip4="${OPTARG}";;
 		b) jail_base_raw="${OPTARG}";;
-		p) jail_parent="${OPTARG}";;
+		p) jail_parent_raw="${OPTARG}";;
 		r) dry=0;;
 		*) echo unknown argument '$var';;
 	esac
@@ -40,14 +40,15 @@ done
 [ -d "${jail_parent}/${jail_name}" ] && echo "Directory ${jail_parent}/${jail_name} already exists!" && exit
 [ $dry -eq 0 ] && set -e errexit
 jail_base=`echo ${jail_base_raw} | sed -e 's@\/@\\\/@g'`
+jail_parent=`echo ${jail_parent_raw} | sed -e 's@\/@\\\/@g'`
 
 execute "mkdir ${jail_parent}/${jail_name}"
 execute "cp -R skel/fstab ${jail_parent}/${jail_name}"
-execute "cp -R skel/jail ${jail_parent}/${jail_name}"
-execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" -e \"s/JAIL_BASE/${jail_base}/g\" -i '' ${jail_parent}/${jail_name}/fstab"
+execute "cp -R skel/jail ${jail_parent_raw}/${jail_name}"
+execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" -e \"s/JAIL_BASE/${jail_base}/g\" -e \"s/JAIL_PARENT/${jail_parent}/g\" -i '' ${jail_parent}/${jail_name}/fstab"
 execute "cp -R skel/rw/ ${jail_parent}/${jail_name}/rw"
-execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" -e \"s/JAIL_IP4/${jail_ip4}/g\"  etc/jail.template >> /etc/jail.conf"
-# -e \"s/JAIL_PARENT/${jail_parent}/g\" # need to escape slashes in $jail_parent
+
+execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" -e \"s/JAIL_IP4/${jail_ip4}/g\" -e \"s/JAIL_PARENT/${jail_parent}/g\"  etc/jail.template >> /etc/jail.conf"
 execute "sed -e \"s/JAIL_NAME/${jail_name}/g\" etc/rctl.template >> /etc/rctl.conf"
 echo Consider to restart rctl
 echo Jail ${jail_name} created. Installing packages...
